@@ -1,90 +1,112 @@
-import React, { Fragment, useEffect,useState } from 'react';
+import React, { Fragment } from 'react';
+import styles from '../../Register/Form.module.scss';
+import {Link} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
 
-import {Link} from 'react-router-dom'
-import styles from '../AdminHome.module.scss';
-import img from '../../../Images/5.jpg'
-
-
-function ListHotels(){
-//=========================pick data from Api =============================
-    let [hotelsData,sethotelsData]=useState([]);
-    let [deleteFlag,setdeleteFlag]=useState(false);
-    useEffect(()=>{
-        fetch('https://localhost:7298/api/Hotels')
-       .then(data => data.json())
-       .then((res)=>{
-        sethotelsData(res);
+function AddHotel(){
+    const {register,handleSubmit,formState:{errors},reset} = useForm({
+        mode: "onTouched"
     });
-
-    },[deleteFlag]);
-//==============================================================================
-
-//===============================delete hotel======================================
-function deleteHotel(hotelId){
-    let confirmResult=window.confirm("Are you sure You Want to delete this item");
-    if(confirmResult ==true){
-        fetch( `https://localhost:7298/api/Hotels/${hotelId}`, { method: 'DELETE' })
-        .then((massage)=>{
-            setdeleteFlag(true);
-            alert(massage);
-        })
+    const onSubmit=async(data)=>{   
+        console.log(data);
+        reset();    
     }
-    
-}
-
-   return(
+  return(
     <Fragment>
-        <div className='container mt-5 mb-5'>
-               <div className='mb-5'>
-                 <Link to='/admin/add' className={styles.add}>Add Hotel</Link>
-               </div>
-                <div className={styles.container}>
-                    <div className='row'>
-                        <table className={styles.table}>
-                        <thead className={styles.head}>
-                            <tr>
-                                <th>Img</th>
-                                <th>Name</th>
-                                <th>City</th>
-                                <th>Country</th>
-                                <th>Desc</th>
-                                <th>Min Price</th>
-                                <th>Actions</th>     
-                            </tr>
-                        </thead>
-                        <tbody className={styles.body}>
-
-                          {hotelsData.map((hotel)=>{
-                           return (
-                           <tr>
-                                    <td><img src={img}/></td>
-                                    <td >{hotel.name}{hotel.hotelIdw}</td>
-                                    <td>{hotel.city}</td>
-                                    <td>{hotel.country}</td>
-                                    <td>{hotel.description}</td>
-                                    <td>{hotel.description}$</td>
-                                    <td> 
-                                        <Link to='/admin/edit/100' className={styles.edit}>
-                                        <i class="fa-solid fa-file-pen"></i>
-                                        </Link>  
-                                        <button onClick={(()=>deleteHotel(hotel.hotelId))} className={styles.del}>
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>    
-                                    </td>   
-                                </tr> )
-
-                        })}
-
-                           
-                            
-                          </tbody>
-                        </table>
-                    </div>
+        <div className={styles.container} style={{height:'100%',backgroundImage:'none'}}>
+                <div className="container" >
+                     <div className={styles.form} style={{backgroundColor:'#F2F5FC'}}>
+                        <div className="row">
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <div className="col-12">
+                                    <div className="input-group mb-4 d-flex justify-content-center">
+                                        <h3>Add Hotel</h3>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm"
+                                        placeholder="Name" name="name"
+                                        {...register("name",{required:"Name is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.name?.type==='required'&&
+                                     <div className={styles.validate}>
+                                        <span>Name is required</span>
+                                     </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="City" name="city"
+                                        {...register("city",{required:"City is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.city?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>City is required</span>
+                                       </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Country" name="country"
+                                        {...register("country",{required:"Country is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.UserName?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Country is required</span>
+                                       </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Description" name="description"
+                                        {...register("description",{required:"Description is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.description?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>description is required</span>
+                                       </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Min Price" name="cheapestPrice"
+                                        {...register("cheapestPrice",{required:"City is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.cheapestPrice?.type==='required'&& 
+                                      <div className={styles.validate}>
+                                        <span>Min Price is required</span>
+                                      </div>}
+                                    </p>
+                                    <div class="mb-3">
+                                        <input class="form-control" type="file" id="formFile"
+                                        name="img"
+                                        {...register("img",{required:"Image is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.img?.type==='required'&& 
+                                      <div className={styles.validate}>
+                                        <span>Image is required</span>
+                                      </div>}
+                                    </p>
+                                    <div className="mb-3 mt-3">
+                                        <button  className="btn shadow-lg">Add</button>
+                                    </div>
+                                    <div className="mt-3">
+                                        <Link to='/admin/hotels' className={styles.link}>Back to List</Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                     </div>
                 </div>
             </div>
-
     </Fragment>
-   )
+  )
 }
 
-export default ListHotels;
+export default AddHotel;
