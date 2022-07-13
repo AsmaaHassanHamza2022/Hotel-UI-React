@@ -62,7 +62,7 @@ function deleteHotel(hotelId){
                                     <td>{hotel.city}</td>
                                     <td>{hotel.country}</td>
                                     <td>{hotel.description}</td>
-                                    <td>{hotel.description}$</td>
+                                    <td>{hotel.cheapestPrice}$</td>
                                     <td> 
                                         <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
                                         <i class="fa-solid fa-file-pen"></i>
