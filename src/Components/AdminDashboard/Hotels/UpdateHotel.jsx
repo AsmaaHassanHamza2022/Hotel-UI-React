@@ -1,19 +1,69 @@
-import React, { Fragment } from 'react';
+import React, { Fragment,useState,useEffect } from 'react';
 import styles from '../../Register/Form.module.scss';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
+import {useParams,} from "react-router-dom";
 
-function UpdateHotel(){
-    const {register,handleSubmit,formState:{errors},reset} = useForm({
+ let UpdateHotel=()=>{
+    const {register,handleSubmit,formState:{errors},reset,setValue } = useForm({
         mode: "onTouched"
     });
+    let [targetHotel , sertTargetHotel]=useState({});
+    //==========================catch target hotel which need to update======
+  const { id } = useParams();
+  let [file,setfile]=useState('');
+  let setImageFile=(event)=>{
+        // console.log(event)
+        setfile(event.target.files[0]);
+    }
+  useEffect(()=>{
+    // fetch data
+    fetch(`https://localhost:7298/api/Hotels/${id}`)
+    .then(data => data.json())
+    .then((res)=>{
+       sertTargetHotel(res);
+    })
+
+     // reset feilds by target hotel
+     let defaultValues = {};
+     defaultValues.name =targetHotel.name;
+     defaultValues.city = targetHotel.city;
+     defaultValues.country = targetHotel.country;
+     defaultValues.description =targetHotel.description;
+     defaultValues.cheapestPrice = targetHotel.cheapestPrice;
+     
+     reset({...defaultValues});
+
+  },[])
     
+// update function
    
-    const onSubmit=async(data)=>{
-       
+    const onSubmit=async(data)=>{ 
+        const url = `//localhost:7298/api/Hotels/Update/${id}`;    
+        const formData = new FormData(); 
+         formData.append('name',data.name);    
+         formData.append('city',data.city);    
+         formData.append('country',data.country);    
+         formData.append('description',data.description);    
+         formData.append('cheapestPrice',data.cheapestPrice);    
+         formData.append('ImagesFile',file);    
+         formData.append('Features',"1");    
+         formData.append('rating',"0"); 
+
+         const config = { 
+            method: 'PUT', 
+            body: formData,    
+        };    
+    
+        fetch(url,config)
+        .then((data)=>data.json())
+        .then((res)=>{
+            console.log(res);
+        })
         reset();
         
     }
+
   return(
     <Fragment>
         <div className={styles.container} style={{height:'100%',backgroundImage:'none'}}>
@@ -26,7 +76,7 @@ function UpdateHotel(){
                                         <h3>Update Hotel</h3>
                                     </div>
                                     <div className="input-group mb-4">
-                                        <input type="text" 
+                                        <input type="text"
                                         className="form-control shadow-sm"
                                         placeholder="Name" name="name"
                                         {...register("name",{required:"Name is required"})}
@@ -63,6 +113,7 @@ function UpdateHotel(){
                                     </p>
                                     <div className="input-group mb-4">
                                         <input type="text" 
+                                       
                                         className="form-control shadow-sm" 
                                         placeholder="Description" name="description"
                                         {...register("description",{required:"Description is required"})}
@@ -75,6 +126,7 @@ function UpdateHotel(){
                                     </p>
                                     <div className="input-group mb-4">
                                         <input type="text" 
+                                         
                                         className="form-control shadow-sm" 
                                         placeholder="Min Price" name="cheapestPrice"
                                         {...register("cheapestPrice",{required:"City is required"})}
@@ -87,6 +139,7 @@ function UpdateHotel(){
                                     </p>
                                     <div class="mb-3">
                                         <input class="form-control" type="file" id="formFile"
+                                          onChange={e => setImageFile(e)}
                                         name="img"
                                         {...register("img",{required:"Image is required"})}
                                         />

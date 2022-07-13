@@ -29,9 +29,9 @@ function AddHotel(){
                  formData.append('Features',"1");    
                  formData.append('rating',"0"); 
                  
-                 for (var [key, value] of formData.entries()) { 
-                    console.log(key, value);
-                 }
+                //  for (var [key, value] of formData.entries()) { 
+                //     console.log(key, value);
+                //  }
                 
                 const config = { 
                     method: 'POST', 

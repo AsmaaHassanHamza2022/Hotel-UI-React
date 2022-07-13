@@ -64,7 +64,7 @@ function deleteHotel(hotelId){
                                     <td>{hotel.description}</td>
                                     <td>{hotel.description}$</td>
                                     <td> 
-                                        <Link to='/admin/edit/100' className={styles.edit}>
+                                        <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
                                         <i class="fa-solid fa-file-pen"></i>
                                         </Link>  
                                         <button onClick={(()=>deleteHotel(hotel.hotelId))} className={styles.del}>
