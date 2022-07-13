@@ -36,7 +36,7 @@ function deleteHotel(hotelId){
     <Fragment>
         <div className='container mt-5 mb-5'>
                <div className='mb-5'>
-                 <Link to='/admin/add' className={styles.add}>Add Hotel</Link>
+                 <Link to='/admin/addHotel' className={styles.add}>Add Hotel</Link>
                </div>
                 <div className={styles.container}>
                     <div className='row'>

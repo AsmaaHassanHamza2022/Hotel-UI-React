@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment,useState } from 'react';
 import styles from '../../Register/Form.module.scss';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
@@ -7,10 +7,45 @@ function AddHotel(){
     const {register,handleSubmit,formState:{errors},reset} = useForm({
         mode: "onTouched"
     });
+
+    //===========================file handling===========================
+
+    //=========prep variable
+    let [file,setfile]=useState('');
+
+     let setImageFile=(event)=>{
+        // console.log(event)
+        setfile(event.target.files[0]);
+    }
     const onSubmit=async(data)=>{   
-        console.log(data);
+                const url = `https://localhost:7298/api/Hotels/Add`;    
+                const formData = new FormData(); 
+                 formData.append('name',data.name);    
+                 formData.append('city',data.city);    
+                 formData.append('country',data.country);    
+                 formData.append('description',data.description);    
+                 formData.append('cheapestPrice',data.cheapestPrice);    
+                 formData.append('ImagesFile',file);    
+                 formData.append('Features',"1");    
+                 formData.append('rating',"0"); 
+                 
+                 for (var [key, value] of formData.entries()) { 
+                    console.log(key, value);
+                 }
+                
+                const config = { 
+                    method: 'POST', 
+                    body: formData,    
+                };    
+            
+                fetch(url,config)
+                .then((data)=>data.json())
+                .then((res)=>{
+                    console.log(res);
+                })
         reset();    
     }
+
   return(
     <Fragment>
         <div className={styles.container} style={{height:'100%',backgroundImage:'none'}}>
@@ -83,9 +118,11 @@ function AddHotel(){
                                       </div>}
                                     </p>
                                     <div class="mb-3">
+                                    
                                         <input class="form-control" type="file" id="formFile"
+                                        onChange={e => setImageFile(e)}
                                         name="img"
-                                        {...register("img",{required:"Image is required"})}
+                                        // {...register("img",{required:"Image is required"})}
                                         />
                                     </div>
                                     <p>{errors.img?.type==='required'&& 
