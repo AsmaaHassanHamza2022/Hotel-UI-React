@@ -28,7 +28,6 @@ function AddHotel(){
                  formData.append('ImagesFile',file);    
                  formData.append('Features',"1");    
                  formData.append('rating',"0"); 
-                 
                 //  for (var [key, value] of formData.entries()) { 
                 //     console.log(key, value);
                 //  }
