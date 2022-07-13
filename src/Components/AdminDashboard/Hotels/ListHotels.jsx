@@ -7,16 +7,20 @@ import img from '../../../Images/5.jpg'
 
 function ListHotels(){
 //=========================pick data from Api =============================
-    let [hotelsData,sethotelsData]=useState([]);
-    let [deleteFlag,setdeleteFlag]=useState(false);
-    useEffect(()=>{
-        fetch('https://localhost:7298/api/Hotels')
-       .then(data => data.json())
-       .then((res)=>{
-        sethotelsData(res);
+let fetchData=()=>{
+    fetch('https://localhost:7298/api/Hotels')
+    .then(data => data.json())
+    .then((res)=>{
+     sethotelsData(res);
     });
+}
 
-    },[deleteFlag]);
+    let [hotelsData,sethotelsData]=useState([]);
+   
+    useEffect(()=>{
+        fetchData();
+    
+    },[]);
 //==============================================================================
 
 //===============================delete hotel======================================
@@ -25,8 +29,9 @@ function deleteHotel(hotelId){
     if(confirmResult ==true){
         fetch( `https://localhost:7298/api/Hotels/${hotelId}`, { method: 'DELETE' })
         .then((massage)=>{
-            setdeleteFlag(true);
-            alert(massage);
+            
+            fetchData();
+           
         })
     }
     
@@ -62,7 +67,7 @@ function deleteHotel(hotelId){
                                     <td>{hotel.city}</td>
                                     <td>{hotel.country}</td>
                                     <td>{hotel.description}</td>
-                                    <td>{hotel.cheapestPrice}$</td>
+                                    <td>{hotel.cheapestPrice }</td>
                                     <td> 
                                         <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
                                         <i class="fa-solid fa-file-pen"></i>
