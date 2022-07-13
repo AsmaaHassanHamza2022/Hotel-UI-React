@@ -4,43 +4,35 @@ import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {useParams,} from "react-router-dom";
 
- let UpdateHotel=()=>{
+   let UpdateHotel=()=>{
     const {register,handleSubmit,formState:{errors},reset,setValue } = useForm({
         mode: "onTouched"
     });
-    let [targetHotel , sertTargetHotel]=useState({});
-    //==========================catch target hotel which need to update======
+    
   const { id } = useParams();
   let [file,setfile]=useState('');
   let setImageFile=(event)=>{
-        // console.log(event)
         setfile(event.target.files[0]);
     }
+    
   useEffect(()=>{
     // fetch data
     fetch(`https://localhost:7298/api/Hotels/${id}`)
     .then(data => data.json())
     .then((res)=>{
-       sertTargetHotel(res);
+        // reset feilds by target hotel
+        const fields = ['name', 'city', 'country', 'description', 'cheapestPrice'];
+        fields.forEach(field => setValue(field, res[field]));
     })
-
-     // reset feilds by target hotel
-     let defaultValues = {};
-     defaultValues.name =targetHotel.name;
-     defaultValues.city = targetHotel.city;
-     defaultValues.country = targetHotel.country;
-     defaultValues.description =targetHotel.description;
-     defaultValues.cheapestPrice = targetHotel.cheapestPrice;
-     
-     reset({...defaultValues});
-
   },[])
     
 // update function
    
     const onSubmit=async(data)=>{ 
-        const url = `//localhost:7298/api/Hotels/Update/${id}`;    
-        const formData = new FormData(); 
+
+        const url =`https://localhost:7298/api/Hotels/Update/${id}`;
+
+        let formData = new FormData(); 
          formData.append('name',data.name);    
          formData.append('city',data.city);    
          formData.append('country',data.country);    
@@ -52,7 +44,7 @@ import {useParams,} from "react-router-dom";
 
          const config = { 
             method: 'PUT', 
-            body: formData,    
+            body:formData,    
         };    
     
         fetch(url,config)
@@ -60,8 +52,8 @@ import {useParams,} from "react-router-dom";
         .then((res)=>{
             console.log(res);
         })
+
         reset();
-        
     }
 
   return(
@@ -141,7 +133,7 @@ import {useParams,} from "react-router-dom";
                                         <input class="form-control" type="file" id="formFile"
                                           onChange={e => setImageFile(e)}
                                         name="img"
-                                        {...register("img",{required:"Image is required"})}
+                                        // {...register("img",{required:"Image is required"})}
                                         />
                                     </div>
                                     <p>{errors.img?.type==='required'&& 
