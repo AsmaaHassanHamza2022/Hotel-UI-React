@@ -63,11 +63,11 @@ function deleteHotel(hotelId){
                            return (
                            <tr>
                                     <td><img src={img}/></td>
-                                    <td >{hotel.name}</td>
-                                    <td>{hotel.city}</td>
-                                    <td>{hotel.country}</td>
-                                    <td>{hotel.description}</td>
-                                    <td>{hotel.cheapestPrice }</td>
+                                    <td >{hotel.hotel.name}</td>
+                                    <td>{hotel.hotel.city}</td>
+                                    <td>{hotel.hotel.country}</td>
+                                    <td>{hotel.hotel.description}</td>
+                                    <td>{hotel.hotel.cheapestPrice }</td>
                                     <td> 
                                         <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
                                         <i class="fa-solid fa-file-pen"></i>
