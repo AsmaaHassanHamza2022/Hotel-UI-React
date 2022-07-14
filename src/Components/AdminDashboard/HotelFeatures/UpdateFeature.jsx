@@ -1,13 +1,46 @@
 import React, { Fragment } from 'react';
 import styles from '../../Register/Form.module.scss';
-import {Link} from 'react-router-dom';
+import {Link,useParams,useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-
+import { useState } from 'react';
+import { useEffect } from 'react';
+import FeatureCRUD from './model/FeatureAPI';
+import Swal from 'sweetalert2';
 function UpdateFeature(){
-    const {register,handleSubmit,formState:{errors},reset} = useForm({
+    const {register,handleSubmit,formState:{errors},reset,setValue} = useForm({
         mode: "onTouched"
     });
-    const onSubmit=async(data)=>{   
+    
+    let param=useParams().id;
+    useEffect(()=>{
+        fetch(`https://localhost:7298/api/Features/${param}`)
+        .then(data => data.json())
+        .then((res)=>{
+        const fields = ['name'];
+        fields.forEach(field => setValue(field, res[field]));
+    })
+
+    })
+    
+    const onSuccess=()=> {  
+        Swal.fire({   
+          text: 'Feature Updated Successfully',  
+          icon: 'success',   
+          confirmButtonColor: '#478e9a',  
+          confirmButtonText: 'OK'  
+        });  
+      } 
+      let navigate=useNavigate();
+    const onSubmit=async(data)=>{  
+        FeatureCRUD.UpdateFeature(param,{
+            name:data.name,
+        })
+        .then(res=>{
+            console.log(res);
+            onSuccess();
+            navigate('/admin/features')
+        })
+        .catch(err=>{console.log(err)})
         reset();    
     }
   return(
@@ -21,22 +54,17 @@ function UpdateFeature(){
                                     <div className="input-group mb-4 d-flex justify-content-center">
                                         <h3>Update Feature</h3>
                                     </div>
-                                    <div className='mb-3'>
-                                        <select className='form-select'>
-                                            <option>--Select--</option>
-                                            <option>Hotel1</option>
-                                            <option>Hotel2</option>
-                                            <option>Hotel3</option>
-                                        </select>  
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="name" placeholder='Feauture'
+                                          {...register("name",{required:"Name is required"})}
+                                         
+                                        />
                                     </div>
-                                    <div className='mb-3'>
-                                        <select className='form-select' multiple size={2}>
-                                            <option>F1</option>
-                                            <option>F2</option>
-                                            <option>F3</option>
-                                            <option>F4</option>
-                                        </select>  
-                                    </div>
+                                    <p>{errors.name?.type==='required'&&
+                                     <div className={styles.validate}>
+                                        <span>Feature is required</span>
+                                     </div>}
+                                    </p>
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Update</button>
                                     </div>

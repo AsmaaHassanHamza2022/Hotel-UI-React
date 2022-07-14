@@ -30,8 +30,7 @@ function AddHotel(){
                  formData.append('rating',"0"); 
                 //  for (var [key, value] of formData.entries()) { 
                 //     console.log(key, value);
-                //  }
-                
+                //  }     
                 const config = { 
                     method: 'POST', 
                     body: formData,    

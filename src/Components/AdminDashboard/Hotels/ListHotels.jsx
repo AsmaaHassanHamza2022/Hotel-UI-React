@@ -30,10 +30,8 @@ function deleteHotel(hotelId){
             fetchData();
            
         })
-    }
-    
+    }    
 }
-
    return(
     <Fragment>
         <div className='container mt-5 mb-5'>
@@ -76,9 +74,7 @@ function deleteHotel(hotelId){
                                 </tr> )
 
                         })}
-
-                           
-                            
+       
                           </tbody>
                         </table>
                     </div>
