@@ -3,9 +3,6 @@ import styles from '../../Register/Form.module.scss';
 import {Link,useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import FeatureCRUD from './model/FeatureAPI';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
 import Swal from 'sweetalert2'
 
 function AddFeature(){
@@ -20,7 +17,7 @@ function AddFeature(){
           confirmButtonText: 'OK'  
         });  
       } 
-      let navigate=useNavigate(); 
+    let navigate=useNavigate(); 
     const onSubmit=async(data)=>{ 
         FeatureCRUD.addFeature({
             name:data.name
@@ -48,7 +45,7 @@ function AddFeature(){
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control" name="name" placeholder='Feauture'
-                                         {...register("name",{required:"Name is required"})}
+                                         {...register("name",{required:"Feauture is required"})}
                                         />
                                     </div>
                                     <p>{errors.name?.type==='required'&&
@@ -61,9 +58,6 @@ function AddFeature(){
                                     </div>
                                     <div className="mt-3">
                                         <Link to='/admin/features' className={styles.link}>Back to List</Link>
-                                    </div>
-                                    <div className={styles.notify}>
-                                       <ToastContainer position="top-right"/>  
                                     </div>
                                 </div>
                             </form>

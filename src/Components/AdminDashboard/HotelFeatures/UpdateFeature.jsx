@@ -2,10 +2,11 @@ import React, { Fragment } from 'react';
 import styles from '../../Register/Form.module.scss';
 import {Link,useParams,useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import { useState } from 'react';
 import { useEffect } from 'react';
 import FeatureCRUD from './model/FeatureAPI';
 import Swal from 'sweetalert2';
+
+
 function UpdateFeature(){
     const {register,handleSubmit,formState:{errors},reset,setValue} = useForm({
         mode: "onTouched"
@@ -56,8 +57,7 @@ function UpdateFeature(){
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control" name="name" placeholder='Feauture'
-                                          {...register("name",{required:"Name is required"})}
-                                         
+                                          {...register("name",{required:"Feauture is required"})} 
                                         />
                                     </div>
                                     <p>{errors.name?.type==='required'&&

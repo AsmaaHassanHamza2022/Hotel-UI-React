@@ -31,9 +31,7 @@ function Features(){
                 listData();
                 toast.success("Feature deleted Successfully")
             })
-            .catch(err=>{console.log(err)})
-            
-            
+            .catch(err=>{console.log(err)})      
         }
     }
    return(
