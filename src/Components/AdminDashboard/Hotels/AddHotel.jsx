@@ -1,4 +1,4 @@
-import React, { Fragment,useState } from 'react';
+import React, { Fragment,useState,useEffect } from 'react';
 import styles from '../../Register/Form.module.scss';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
@@ -8,41 +8,85 @@ function AddHotel(){
         mode: "onTouched"
     });
 
-    //===========================file handling===========================
+    //===========load all feature for hotel==========
+    let [hotelFeatures,sethotelFeatures]=useState([]);
+    useEffect(
+    ()=>{
+    fetch('https://localhost:7298/api/Features')
+    .then(data => data.json())
+    .then((res)=>{
+     sethotelFeatures(res);
+    
+    })
+    },[]);
 
-    //=========prep variable
+    // catch selectBox and prepare its value
+
+    let [selectValue ,setselectValue]=useState([]);
+    let [selectedBox ,setselectBox]=useState(null);
+
+   let handleChange =(selectBox)=>{
+    setselectBox(selectBox);
+   }
+
+   // get all values from  select box
+   function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+  
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+  
+      if (opt.selected) {
+        result.push(Number(opt.value));
+      }
+    }
+    return result;
+  }
+    //===========================file handling===========================
     let [file,setfile]=useState('');
 
      let setImageFile=(event)=>{
         // console.log(event)
         setfile(event.target.files[0]);
     }
-    const onSubmit=async(data)=>{   
-                const url = `https://localhost:7298/api/Hotels/Add`;    
-                const formData = new FormData(); 
-                 formData.append('name',data.name);    
-                 formData.append('city',data.city);    
-                 formData.append('country',data.country);    
-                 formData.append('description',data.description);    
-                 formData.append('cheapestPrice',data.cheapestPrice);    
-                 formData.append('ImagesFile',file);    
-                 formData.append('Features',"1");    
-                 formData.append('rating',"0"); 
-                 
-                //  for (var [key, value] of formData.entries()) { 
-                //     console.log(key, value);
-                //  }
-                
-                const config = { 
-                    method: 'POST', 
-                    body: formData,    
-                };    
+
+// add hotel 
+    const onSubmit=async(data)=>{ 
+        
+        // selected feature for hotel
+        let selectedData=getSelectValues(selectedBox);
+         setselectValue([...selectedData]);
+         if(selectValue.length !=0){
+            console.log(selectValue)
+
+            const url = `https://localhost:7298/api/Hotels/Add`;    
+            const formData = new FormData(); 
+             formData.append('name',data.name);    
+             formData.append('city',data.city);    
+             formData.append('country',data.country);    
+             formData.append('description',data.description);    
+             formData.append('cheapestPrice', data.cheapestPrice);        
+             formData.append('ImagesFile',file);        
+             formData.append('Features',JSON.stringify(selectValue));    
+             formData.append('rating',"0"); 
+             
             
-                fetch(url,config)
-                .then((data)=>data.json())
-                .then((res)=>{
-                    console.log(res);
-                })
+            const config = { 
+                method: 'POST', 
+                body: formData,    
+            };    
+        
+            fetch(url,config)
+            .then((data)=>data.json())
+            .then((res)=>{
+                console.log(res);
+            })
+         }else{
+            alert("Please Try Again.......!")
+         } 
+       
         reset();    
     }
 
@@ -109,12 +153,42 @@ function AddHotel(){
                                         <input type="text" 
                                         className="form-control shadow-sm" 
                                         placeholder="Min Price" name="cheapestPrice"
-                                        {...register("cheapestPrice",{required:"City is required"})}
+                                        {...register("cheapestPrice",{required:"cheapest price is required"})}
                                         />
                                     </div>
                                     <p>{errors.cheapestPrice?.type==='required'&& 
                                       <div className={styles.validate}>
                                         <span>Min Price is required</span>
+                                      </div>}
+                                    </p>
+
+                                    <div className="input-group mb-4">
+                                        <select 
+                                        className="form-control shadow-sm" 
+                                         name="hotelFeature"
+                                         onChange={(e)=>{handleChange(e.target)}}
+                                         multiple
+                                        // {...register("hotelFeature",{required:"hotel feature is required"})}
+                                        >
+                                           
+                                            {
+                                                hotelFeatures.map((feature,i)=>{
+
+                                                    return(
+                                                        <option key={i} value={feature.featureId}>
+                                                        {feature.name}   
+                                                       </option>
+                                                    )
+                                                  
+                                                  
+                                                })
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <p>{errors.hotelFeature?.type==='required'&& 
+                                      <div className={styles.validate}>
+                                        <span>hotelFeature is requird</span>
                                       </div>}
                                     </p>
                                     <div class="mb-3">

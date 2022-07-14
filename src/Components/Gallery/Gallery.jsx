@@ -13,7 +13,7 @@ function Gallery(){
                 <div className={styles.container}>
                     <div className='row'>
                         <div className='mt-5 col-12 text-center'>
-                        <h2 className={styles.h2}>Gallery</h2>
+                        <h2 className={styles.h2}>New Suites For You</h2>
                         </div>
                     </div>
                     <div className='row mt-5'>
@@ -25,6 +25,7 @@ function Gallery(){
                         <div className='row'>
                             <div className='col-md-3 col-6 mb-5'>
                                 <img src={img1} />
+                              
                             </div>
                             <div className='col-md-3 col-6 mb-5'>
                                 <img src={img2} />

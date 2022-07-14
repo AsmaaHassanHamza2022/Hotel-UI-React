@@ -28,7 +28,7 @@ function Places(){
                 <div className={styles.container}>
                     <div className='row'>
                         <div className='mt-5 col-12 text-center'>
-                        <h2 className={styles.h2}>Place to visit</h2>
+                        <h2 className={styles.h2}>Top Rated Rentals </h2>
                         </div>
                     </div>
                     <div className='row w-md-75 w-sm-100 mx-auto mt-4'>

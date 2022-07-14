@@ -39,7 +39,7 @@ import {useParams,} from "react-router-dom";
          formData.append('description',data.description);    
          formData.append('cheapestPrice',data.cheapestPrice);    
          formData.append('ImagesFile',file);    
-         formData.append('Features',"1");    
+         formData.append('Features',1);    
          formData.append('rating',"0"); 
 
          const config = { 
