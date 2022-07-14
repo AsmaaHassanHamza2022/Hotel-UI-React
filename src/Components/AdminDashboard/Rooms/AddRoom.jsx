@@ -2,12 +2,57 @@ import React, { Fragment } from 'react';
 import styles from '../../Register/Form.module.scss';
 import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
-function AddRoom(){
+function AddRoom(){ 
     const {register,handleSubmit,formState:{errors},reset} = useForm({
         mode: "onTouched"
     });
+    let [hotels,setHotel]=useState([]);
+    let hotelURL='https://localhost:7298/api/Hotels';
+    useEffect(()=>{
+      axios.get(hotelURL)
+      .then(res=>{
+        //console.log(res.data);
+        setHotel(res.data)
+      })
+      .catch(err=>{console.log(err)})
+      
+      
+    },[])
+   
+    let [file,setfile]=useState('');
+
+     let setImageFile=(event)=>{
+        // console.log(event)
+        setfile(event.target.files[0]);
+    }
     const onSubmit=async(data)=>{   
+        console.log(data)
+        const url=`https://localhost:7298/api/Rooms/Add`
+        const formData = new FormData();
+        formData.append('type',data.type);
+        formData.append('roomNumber',data.roomNumber);
+        formData.append('maxPeople',data.maxPeople);
+        formData.append('description',data.description);
+        formData.append('Price',data.Price);
+        formData.append('ImagesFile',file);  
+        formData.append('HotelId',data.HotelId);  
+        formData.append('Services',"1"); 
+
+        const config = { 
+            method: 'POST', 
+            body: formData,    
+        };    
+    
+        fetch(url,config)
+        .then((data)=>data.json())
+        .then((res)=>{
+            console.log(res);
+        })  
+
         reset();    
     }
   return(
@@ -69,17 +114,77 @@ function AddRoom(){
                                         <span>description is required</span>
                                        </div>}
                                     </p>
-                                    <div class="mb-3">
-                                        <input class="form-control" type="file" id="formFile"
-                                        name="img"
-                                        {...register("img",{required:"Image is required"})}
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Price" name="Price"
+                                        {...register("Price",{required:"Price is required"})}
                                         />
                                     </div>
-                                    <p>{errors.img?.type==='required'&& 
-                                      <div className={styles.validate}>
-                                        <span>Image is required</span>
-                                      </div>}
+                                    <p>{errors.Price?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Price is required</span>
+                                       </div>}
                                     </p>
+                                    <div class="mb-3">
+                                    
+                                    <input class="form-control" type="file" id="formFile"
+                                    onChange={e => setImageFile(e)}
+                                    name="img"
+                                    // {...register("img",{required:"Image is required"})}
+                                    />
+                                    </div>
+                                    <p>{errors.img?.type==='required'&& 
+                                        <div className={styles.validate}>
+                                        <span>Image is required</span>
+                                    </div>}
+                                    </p>
+                                    <div className='mb-3'>
+                                        <select className='form-control'>
+                                            <option>HotelId</option>
+                                            {hotels.map(item=>{
+                                                return(
+                                                    <option>
+                                                    {item.hotel.hotelId}==&gt;{item.hotel.name}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Enter Hotel Id" name="HotelId"
+                                        {...register("HotelId",{required:"HotelId is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.HotelId?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Hotel Id is required</span>
+                                       </div>}
+                                    </p>
+                                    {/* <div>
+                                        <select className='form-control'>
+                                            <option >Id--Name</option>
+                                            {service.map((item,index)=>{
+                                                return(
+                                                    <option key={index}>{item.serviceId}--{item.name}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Enter Serivce Id" name="Services"
+                                        {...register("Services",{required:"Services is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.Services?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Service Id is required</span>
+                                       </div>}
+                                    </p> */}
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Add</button>
                                     </div>

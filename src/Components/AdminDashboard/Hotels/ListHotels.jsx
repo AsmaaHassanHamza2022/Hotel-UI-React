@@ -6,6 +6,7 @@ import img from '../../../Images/5.jpg'
 
 
 function ListHotels(){
+    let [hotelsData,sethotelsData]=useState([]);
 //=========================pick data from Api =============================
 let fetchData=()=>{
     fetch('https://localhost:7298/api/Hotels')
@@ -14,13 +15,9 @@ let fetchData=()=>{
      sethotelsData(res);
     });
 }
-
-    let [hotelsData,sethotelsData]=useState([]);
-   
-    useEffect(()=>{
-        fetchData();
-    
-    },[]);
+useEffect(()=>{
+    fetchData();  
+},[]);
 //==============================================================================
 
 //===============================delete hotel======================================
@@ -33,10 +30,8 @@ function deleteHotel(hotelId){
             fetchData();
            
         })
-    }
-    
+    }    
 }
-
    return(
     <Fragment>
         <div className='container mt-5 mb-5'>
@@ -79,9 +74,7 @@ function deleteHotel(hotelId){
                                 </tr> )
 
                         })}
-
-                           
-                            
+       
                           </tbody>
                         </table>
                     </div>
