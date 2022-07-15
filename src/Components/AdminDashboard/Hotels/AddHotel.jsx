@@ -16,7 +16,6 @@ function AddHotel(){
     .then(data => data.json())
     .then((res)=>{
      sethotelFeatures(res);
-    
     })
     },[]);
 

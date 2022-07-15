@@ -2,16 +2,15 @@ import React, { Fragment, useState,useEffect  } from 'react';
 import {Link} from 'react-router-dom'
 import styles from '../AdminHome.module.scss';
 import axios from 'axios';
-import img from '../../../Images/5.jpg'
-
+import RoomCRUD from './model/RoomAPI';
+import img from '../../../Images/5.jpg';
 
 
 
 function ListRooms(){
     let [rooms,setRooms]=useState([]);
-    let roomURL='https://localhost:7298/api/Rooms';
     const listData=()=>{
-        axios.get(roomURL)
+        RoomCRUD.getAll()
         .then(res=>{
             //console.log(res.data)
             setRooms(res.data)
@@ -25,7 +24,7 @@ function ListRooms(){
     const deleteRoom=(roomId)=>{
         let confirmResult=window.confirm("Are you sure You Want to delete this item");
         if(confirmResult ==true){
-            axios.delete(roomURL+'/'+roomId)
+            RoomCRUD.delRoom(roomId)
             .then(res=>{
                 listData();
             })
@@ -48,7 +47,7 @@ function ListRooms(){
                                     <th>Room no</th>
                                     <th>maxPeople</th>
                                     <th>Desc</th>
-                                    <th>Price</th>
+                                    {/* <th>Price</th> */}
                                     <th>Actions</th>     
                                 </tr>
                             </thead>
@@ -61,7 +60,14 @@ function ListRooms(){
                                             <td>{item.room.roomNumber}</td>
                                             <td>{item.room.maxPeople}</td>
                                             <td>{item.room.description}</td>
-                                           
+                                            {/* <td>
+                                                {item.room.roomsInHotel?.map(item=>{
+                                                    return(
+                                                        <span key={item.roomId}>{item.price}</span>
+                                                    )
+                                                })}
+                                            </td>
+                                            */}
                                             <td> 
                                                 <Link to={"/admin/editRoom/" + item.roomId }className={styles.edit}>
                                                     <i class="fa-solid fa-file-pen"></i>

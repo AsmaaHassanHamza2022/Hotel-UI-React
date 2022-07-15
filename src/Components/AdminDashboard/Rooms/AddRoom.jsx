@@ -39,8 +39,8 @@ function AddRoom(){
         formData.append('description',data.description);
         formData.append('Price',data.Price);
         formData.append('ImagesFile',file);  
-        formData.append('HotelId',data.HotelId);  
-        formData.append('Services',"1"); 
+        formData.append('HotelId',4);  
+        formData.append('Services',1); 
 
         const config = { 
             method: 'POST', 
@@ -139,7 +139,7 @@ function AddRoom(){
                                         <span>Image is required</span>
                                     </div>}
                                     </p>
-                                    <div className='mb-3'>
+                                    {/* <div className='mb-3'>
                                         <select className='form-control'>
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
@@ -162,7 +162,7 @@ function AddRoom(){
                                        <div className={styles.validate}>
                                         <span>Hotel Id is required</span>
                                        </div>}
-                                    </p>
+                                    </p> */}
                                     {/* <div>
                                         <select className='form-control'>
                                             <option >Id--Name</option>

@@ -21,15 +21,10 @@ function UpdateRoom(){
         .then(data => data.json())
         .then((res)=>{
             // reset feilds by target hotel
-            const fields = ['type', 'roomNumber', 'maxPeople', 'description', 'Price','HotelId'];
+            const fields = ['type', 'roomNumber', 'maxPeople', 'description', 'Price'];
             fields.forEach(field => setValue(field, res[field]));
         })
-        axios.get(hotelURL)
-          .then(res=>{
-            //console.log(res.data);
-            setHotel(res.data)
-          })
-          .catch(err=>{console.log(err)})
+       
           
     },[])
     const onSubmit=async(data)=>{ 
@@ -41,8 +36,8 @@ function UpdateRoom(){
         formData.append('description',data.description);
         formData.append('Price',data.Price);
         formData.append('ImagesFile',file);  
-        formData.append('HotelId',data.HotelId);  
-        formData.append('Services',"1"); 
+        formData.append('HotelId',4);  
+        formData.append('Services',1); 
 
         const config = { 
             method: 'PUT', 
@@ -131,7 +126,7 @@ function UpdateRoom(){
                                         <input class="form-control" type="file" id="formFile"
                                         name="img"
                                         onChange={e => setImageFile(e)}
-                                        {...register("img",{required:"Image is required"})}
+                                        // {...register("img",{required:"Image is required"})}
                                         />
                                     </div>
                                     <p>{errors.img?.type==='required'&& 
@@ -139,7 +134,7 @@ function UpdateRoom(){
                                         <span>Image is required</span>
                                       </div>}
                                     </p>
-                                    <div className='mb-3'>
+                                    {/* <div className='mb-3'>
                                         <select className='form-control'>
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
@@ -162,7 +157,7 @@ function UpdateRoom(){
                                        <div className={styles.validate}>
                                         <span>Hotel Id is required</span>
                                        </div>}
-                                    </p>
+                                    </p> */}
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Update</button>
                                     </div>
