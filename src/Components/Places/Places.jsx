@@ -34,10 +34,34 @@ function Places(){
                     <div className='row w-md-75 w-sm-100 mx-auto mt-4'>
                     <OwlCarousel className='owl-theme' loop margin={10} nav {...setting}>
                         <div className={styles.items}>
-                            <img src={img} className={styles.img}/>
+                        <div className="card" style={{"width":'18rem'}}>
+                            <img src={img} className="card-img-top" alt="hotel-name" />
+                            <div class="card-body">
+                                <h5 className="card-title">Hotel Name</h5>
+                                <p className="card-text">desc</p>
+                                
+                            </div>
+                           <div className="card-footer">
+                            <div className="d-flex  justify-content-between">
+                                <div className="features">
+                                 <ul type="none">
+                                    <li>feature-1</li>
+                                    <li>feature-2</li>
+                                    <li>feature-3</li>
+                                 </ul>
+                                </div>
+                                <div className="book-btn d-flex align-items-center">
+                                <a href="#" className="btn btn-primary">Book now</a>
+
+                                </div>
+
+                            </div>
+                           </div>
+                            </div>
+                            {/* <img src={img} className={styles.img}/>
                             <div className={styles.overlay}>
                                 <h4>Cairo</h4>
-                            </div>
+                            </div> */}
                         </div>
                         <div className={styles.items}>
                             <img src={img} className={styles.img}/>
