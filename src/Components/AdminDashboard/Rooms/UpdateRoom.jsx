@@ -14,16 +14,27 @@ function UpdateRoom(){
             setfile(event.target.files[0]);
         }
     let [hotels,setHotel]=useState([]);
+    let [service,setService]=useState([]);
     let hotelURL='https://localhost:7298/api/Hotels';
+    let serviceURL='https://localhost:7298/api/Services';
     useEffect(()=>{
          // fetch data
         fetch(`https://localhost:7298/api/Rooms/${param}`)
         .then(data => data.json())
         .then((res)=>{
             // reset feilds by target hotel
-            const fields = ['type', 'roomNumber', 'maxPeople', 'description', 'Price'];
+            const fields = ['type', 'roomNumber', 'maxPeople', 'description', 'Price','HotelId','Services'];
             fields.forEach(field => setValue(field, res[field]));
         })
+        axios.get(hotelURL)
+          .then(res=>{
+            //console.log(res.data);
+            setHotel(res.data)
+          })
+          .catch(err=>{console.log(err)})  
+          axios.get(serviceURL)
+          .then(res=>{setService(res.data)})
+          .catch(err=>{console.log(err)})
        
           
     },[])
@@ -36,8 +47,8 @@ function UpdateRoom(){
         formData.append('description',data.description);
         formData.append('Price',data.Price);
         formData.append('ImagesFile',file);  
-        formData.append('HotelId',4);  
-        formData.append('Services',1); 
+        formData.append('HotelId',data.HotelId);  
+        formData.append('Services',data.Services); 
 
         const config = { 
             method: 'PUT', 
@@ -134,12 +145,12 @@ function UpdateRoom(){
                                         <span>Image is required</span>
                                       </div>}
                                     </p>
-                                    {/* <div className='mb-3'>
+                                    <div className='mb-3'>
                                         <select className='form-control'>
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
                                                 return(
-                                                    <option>
+                                                    <option key={item.hotel.hotelId}>
                                                     {item.hotel.hotelId}==&gt;{item.hotel.name}
                                                     </option>
                                                 )
@@ -157,7 +168,29 @@ function UpdateRoom(){
                                        <div className={styles.validate}>
                                         <span>Hotel Id is required</span>
                                        </div>}
-                                    </p> */}
+                                    </p>
+                                    <div className='mb-3'>
+                                        <select className='form-control'>
+                                            <option >ServiceId</option>
+                                            {service.map((item,index)=>{
+                                                return(
+                                                    <option key={index}>{item.serviceId}--{item.name}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Enter Serivce Id" name="Services"
+                                        {...register("Services",{required:"Services is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.Services?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Service Id is required</span>
+                                       </div>}
+                                    </p>
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Update</button>
                                     </div>

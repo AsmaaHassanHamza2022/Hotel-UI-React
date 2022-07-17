@@ -40,43 +40,45 @@ function deleteHotel(hotelId){
                </div>
                 <div className={styles.container}>
                     <div className='row'>
-                        <table className={styles.table}>
-                        <thead className={styles.head}>
-                            <tr>
-                                <th>Img</th>
-                                <th>Name</th>
-                                <th>City</th>
-                                <th>Country</th>
-                                <th>Desc</th>
-                                <th>Min Price</th>
-                                <th>Actions</th>     
-                            </tr>
-                        </thead>
-                        <tbody className={styles.body}>
-
-                          {hotelsData.map((hotel)=>{
-                           return (
-                           <tr>
-                                    <td><img src={img}/></td>
-                                    <td >{hotel.hotel.name}</td>
-                                    <td>{hotel.hotel.city}</td>
-                                    <td>{hotel.hotel.country}</td>
-                                    <td>{hotel.hotel.description}</td>
-                                    <td>{hotel.hotel.cheapestPrice }</td>
-                                    <td> 
-                                        <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
-                                        <i class="fa-solid fa-file-pen"></i>
-                                        </Link>  
-                                        <button onClick={(()=>deleteHotel(hotel.hotelId))} className={styles.del}>
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>    
-                                    </td>   
-                                </tr> )
-
-                        })}
-       
-                          </tbody>
-                        </table>
+                        {hotelsData.length===0?<div><h2>No Data</h2></div>:
+                           <table className={styles.table}>
+                           <thead className={styles.head}>
+                               <tr>
+                                   <th>Img</th>
+                                   <th>Name</th>
+                                   <th>City</th>
+                                   <th>Country</th>
+                                   <th>Desc</th>
+                                   <th>Min Price</th>
+                                   <th>Actions</th>     
+                               </tr>
+                           </thead>
+                           <tbody className={styles.body}>
+   
+                             {hotelsData.map((hotel)=>{
+                              return (
+                              <tr>
+                                       <td><img src={img}/></td>
+                                       <td >{hotel.hotel.name}</td>
+                                       <td>{hotel.hotel.city}</td>
+                                       <td>{hotel.hotel.country}</td>
+                                       <td>{hotel.hotel.description}</td>
+                                       <td>{hotel.hotel.cheapestPrice }</td>
+                                       <td> 
+                                           <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
+                                           <i class="fa-solid fa-file-pen"></i>
+                                           </Link>  
+                                           <button onClick={(()=>deleteHotel(hotel.hotelId))} className={styles.del}>
+                                               <i class="fa-solid fa-trash"></i>
+                                           </button>    
+                                       </td>   
+                                   </tr> )
+   
+                                 })}
+          
+                             </tbody>
+                           </table>
+                        }
                     </div>
                 </div>
             </div>

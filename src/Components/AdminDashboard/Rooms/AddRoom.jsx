@@ -11,16 +11,19 @@ function AddRoom(){
         mode: "onTouched"
     });
     let [hotels,setHotel]=useState([]);
+    let [service,setService]=useState([]);
     let hotelURL='https://localhost:7298/api/Hotels';
+    let serviceURL='https://localhost:7298/api/Services';
     useEffect(()=>{
       axios.get(hotelURL)
       .then(res=>{
         //console.log(res.data);
         setHotel(res.data)
       })
+      .catch(err=>{console.log(err)})  
+      axios.get(serviceURL)
+      .then(res=>{setService(res.data)})
       .catch(err=>{console.log(err)})
-      
-      
     },[])
    
     let [file,setfile]=useState('');
@@ -39,8 +42,8 @@ function AddRoom(){
         formData.append('description',data.description);
         formData.append('Price',data.Price);
         formData.append('ImagesFile',file);  
-        formData.append('HotelId',4);  
-        formData.append('Services',1); 
+        formData.append('HotelId',data.HotelId);  
+        formData.append('Services',data.Services); 
 
         const config = { 
             method: 'POST', 
@@ -139,12 +142,12 @@ function AddRoom(){
                                         <span>Image is required</span>
                                     </div>}
                                     </p>
-                                    {/* <div className='mb-3'>
+                                    <div className='mb-3'>
                                         <select className='form-control'>
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
                                                 return(
-                                                    <option>
+                                                    <option key={item.hotel.hotelId}>
                                                     {item.hotel.hotelId}==&gt;{item.hotel.name}
                                                     </option>
                                                 )
@@ -162,10 +165,10 @@ function AddRoom(){
                                        <div className={styles.validate}>
                                         <span>Hotel Id is required</span>
                                        </div>}
-                                    </p> */}
-                                    {/* <div>
+                                    </p>
+                                    <div className='mb-3'>
                                         <select className='form-control'>
-                                            <option >Id--Name</option>
+                                            <option >ServiceId</option>
                                             {service.map((item,index)=>{
                                                 return(
                                                     <option key={index}>{item.serviceId}--{item.name}</option>
@@ -184,7 +187,7 @@ function AddRoom(){
                                        <div className={styles.validate}>
                                         <span>Service Id is required</span>
                                        </div>}
-                                    </p> */}
+                                    </p>
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Add</button>
                                     </div>

@@ -39,50 +39,49 @@ function ListRooms(){
                </div>
                 <div className={styles.container}>
                     <div className='row'>
-                            <table className={styles.table}>
-                            <thead className={styles.head}>
-                                <tr>
-                                    <th>Img</th>
-                                    <th>Type</th>
-                                    <th>Room no</th>
-                                    <th>maxPeople</th>
-                                    <th>Desc</th>
-                                    {/* <th>Price</th> */}
-                                    <th>Actions</th>     
-                                </tr>
-                            </thead>
-                            <tbody className={styles.body}>
-                                {rooms.map((item,index)=>{
-                                    return(
-                                        <tr key={item.roomId}>
-                                            <td><img src={img}/></td>
-                                            <td>{item.room.type}</td>
-                                            <td>{item.room.roomNumber}</td>
-                                            <td>{item.room.maxPeople}</td>
-                                            <td>{item.room.description}</td>
-                                            {/* <td>
-                                                {item.room.roomsInHotel?.map(item=>{
-                                                    return(
-                                                        <span key={item.roomId}>{item.price}</span>
-                                                    )
-                                                })}
-                                            </td>
-                                            */}
-                                            <td> 
-                                                <Link to={"/admin/editRoom/" + item.roomId }className={styles.edit}>
-                                                    <i class="fa-solid fa-file-pen"></i>
-                                                </Link>  
-                                                <button onClick={(()=>deleteRoom(item.roomId))} className={styles.del}>
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>    
-                                            </td>   
-                                        </tr>
-                                    )
-
-                                })}
-                              </tbody>
-                            </table>
-                        
+                        {rooms.length===0?<div><h2>No Data</h2></div>:
+                             <table className={styles.table}>
+                             <thead className={styles.head}>
+                                 <tr>
+                                     <th>Img</th>
+                                     <th>Type</th>
+                                     <th>Room no</th>
+                                     <th>maxPeople</th>
+                                     <th>Desc</th>
+                                     <th>Price</th>
+                                     <th>Actions</th>     
+                                 </tr>
+                             </thead>
+                             <tbody className={styles.body}>
+                                 {rooms.map((item,index)=>{
+                                     return(
+                                         <tr key={item.roomId}>
+                                             <td><img src={img}/></td>
+                                             <td>{item.room.type}</td>
+                                             <td>{item.room.roomNumber}</td>
+                                             <td>{item.room.maxPeople}</td>
+                                             <td>{item.room.description}</td>
+                                             <td>
+                                                 {item.room.roomsInHotel?.map(item=>{
+                                                     return(
+                                                         <span key={item.roomId}>{item.price}</span>
+                                                     )
+                                                 })}
+                                             </td>
+                                             <td> 
+                                                 <Link to={"/admin/editRoom/" + item.roomId }className={styles.edit}>
+                                                     <i class="fa-solid fa-file-pen"></i>
+                                                 </Link>  
+                                                 <button onClick={(()=>deleteRoom(item.roomId))} className={styles.del}>
+                                                     <i class="fa-solid fa-trash"></i>
+                                                 </button>    
+                                             </td>   
+                                         </tr>
+                                     )
+                                 })}
+                               </tbody>
+                             </table>     
+                           }
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import styles from '../../Register/Form.module.scss';
-import {Link} from 'react-router-dom';
+import {Link,useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
+import Swal from 'sweetalert2'
 
 function AddHotel(){
     const {register,handleSubmit,formState:{errors},reset} = useForm({
@@ -50,7 +51,15 @@ function AddHotel(){
         // console.log(event)
         setfile(event.target.files[0]);
     }
-
+    const onSuccess=()=> {  
+        Swal.fire({   
+          text: 'Feature Added Successfully',  
+          icon: 'success',   
+          confirmButtonColor: '#478e9a',  
+          confirmButtonText: 'OK'  
+        });  
+      } 
+    let navigate=useNavigate();
 // add hotel 
     const onSubmit=async(data)=>{ 
         
@@ -80,6 +89,8 @@ function AddHotel(){
             fetch(url,config)
             .then((data)=>data.json())
             .then((res)=>{
+                //onSuccess();
+                //navigate('/admin/hotels');
                 console.log(res);
             })
          }else{

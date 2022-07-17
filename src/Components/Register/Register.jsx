@@ -30,7 +30,7 @@ function Register({setUpData}){
         USERACCOUNT.register(data)
         .then(res=>{
             console.log(res)
-            //localStorage.setItem("registerData",JSON.stringify(data));
+            localStorage.setItem("registerData",JSON.stringify(data));
         })
         .catch(err=>{
             console.log(err);
@@ -53,6 +53,16 @@ function Register({setUpData}){
                                 <div className="col-12">
                                     <div className="input-group mb-4 d-flex justify-content-center">
                                         <h3>Register</h3>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <span className="input-group-text " id="basic-addon1">
+                                        <i className="fa-solid fa-user"></i>
+                                        </span>
+                                        <input type="text" 
+                                        className="form-control shadow-sm"
+                                        placeholder="First Name" name="FirstName"
+                                        {...register("FirstName",{required:"First Name is required"})}
+                                        />
                                     </div>
                                     <div className="input-group mb-4">
                                         <span className="input-group-text " id="basic-addon1">
