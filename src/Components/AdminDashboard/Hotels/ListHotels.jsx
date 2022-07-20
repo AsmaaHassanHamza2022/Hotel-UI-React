@@ -2,7 +2,10 @@ import React, { Fragment, useEffect,useState } from 'react';
 
 import {Link} from 'react-router-dom'
 import styles from '../AdminHome.module.scss';
-import img from '../../../Images/5.jpg'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import img from '../../../Images/5.jpg';
 
 
 function ListHotels(){
@@ -21,16 +24,18 @@ useEffect(()=>{
 //==============================================================================
 
 //===============================delete hotel======================================
-function deleteHotel(hotelId){
+const deleteHotel=(hotelId)=>{
     let confirmResult=window.confirm("Are you sure You Want to delete this item");
     if(confirmResult ==true){
         fetch( `https://localhost:7298/api/Hotels/${hotelId}`, { method: 'DELETE' })
         .then((massage)=>{
             
             fetchData();
+
            
         })
-    }    
+    } 
+    toast.success("Hotel deleted Successfully")   
 }
    return(
     <Fragment>

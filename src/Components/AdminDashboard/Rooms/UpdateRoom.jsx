@@ -1,8 +1,9 @@
 import React, { Fragment ,useEffect,useState} from 'react';
 import styles from '../../Register/Form.module.scss';
-import {Link,useParams} from 'react-router-dom';
+import {Link,useParams,useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function UpdateRoom(){
     const {register,handleSubmit,formState:{errors},reset,setValue} = useForm({
@@ -17,8 +18,10 @@ function UpdateRoom(){
     let [service,setService]=useState([]);
     let hotelURL='https://localhost:7298/api/Hotels';
     let serviceURL='https://localhost:7298/api/Services';
+    
     useEffect(()=>{
          // fetch data
+        
         fetch(`https://localhost:7298/api/Rooms/${param}`)
         .then(data => data.json())
         .then((res)=>{
@@ -39,9 +42,42 @@ function UpdateRoom(){
        
           
     },[])
+    let [selectValue ,setselectValue]=useState([]);
+    let [selectedBox ,setselectBox]=useState(null);
+    let handleChange =(selectBox)=>{
+        setselectBox(selectBox);
+    }
+   //====================================================
+   function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+  
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+  
+      if (opt.selected) {
+        result.push(Number(opt.value));
+      }
+    }
+    return result;
+  }
+  const onSuccess=()=> {  
+    Swal.fire({   
+      text: 'Room Updated Successfully',  
+      icon: 'success',   
+      confirmButtonColor: '#478e9a',  
+      confirmButtonText: 'OK'  
+    });  
+  } 
+   let navigate=useNavigate();
     const onSubmit=async(data)=>{ 
+        
+        let selectedData=getSelectValues(selectedBox);
+        setselectValue([...selectedData]);
+        if(selectValue.length !=0){
+           console.log(selectValue)
         const url=`https://localhost:7298/api/Rooms/Update/${param}`;
-        console.log(data)
         const formData = new FormData();
         formData.append('type',data.type);
         formData.append('roomNumber',data.roomNumber);
@@ -50,7 +86,7 @@ function UpdateRoom(){
         formData.append('Price',data.Price);
         formData.append('ImagesFile',file);  
         formData.append('HotelId',data.HotelId);  
-        formData.append('Services',data.Services); 
+        formData.append('Services',JSON.stringify(selectValue)); 
 
         const config = { 
             method: 'PUT', 
@@ -60,8 +96,12 @@ function UpdateRoom(){
         fetch(url,config)
         .then((data)=>data.json())
         .then((res)=>{
-            console.log(res);
-        })  
+            navigate('/admin/rooms');
+            onSuccess();
+        })
+    }else{
+        alert("Please Try Again.......!")
+     }    
         reset();    
     }
   return(
@@ -126,7 +166,7 @@ function UpdateRoom(){
                                     <div className="input-group mb-4">
                                         <input type="text" 
                                         className="form-control shadow-sm" 
-                                        placeholder="Price" name="Price"
+                                        placeholder="Price" name="Price" 
                                         {...register("Price",{required:"Price is required"})}
                                         />
                                     </div>
@@ -135,17 +175,14 @@ function UpdateRoom(){
                                         <span>Price is required</span>
                                        </div>}
                                     </p>
-                                    <p>{errors.img?.type==='required'&& 
-                                      <div className={styles.validate}>
-                                        <span>Image is required</span>
-                                      </div>}
-                                    </p>
                                     <div className='mb-3'>
-                                        <select className='form-control'>
+                                        <select className='form-control'
+                                        onChange={(e)=>{handleChange(e.target)}}
+                                        >
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
                                                 return(
-                                                    <option key={item.hotelData.hotelId}>
+                                                    <option key={item.hotelData.hotelId} value={item.hotelData.hotelId}>
                                                     {item.hotelData.name}==&gt;{item.hotelData.hotelId}
                                                     </option>
                                                 )
@@ -155,37 +192,29 @@ function UpdateRoom(){
                                     <div className="input-group mb-4">
                                         <input type="text" 
                                         className="form-control shadow-sm" 
-                                        placeholder="Enter Hotel Id" name="HotelId"
+                                        placeholder="HotelId" name="HotelId"
                                         {...register("HotelId",{required:"HotelId is required"})}
                                         />
                                     </div>
                                     <p>{errors.HotelId?.type==='required'&& 
-                                       <div className={styles.validate}>
-                                        <span>Hotel Id is required</span>
-                                       </div>}
+                                        <div className={styles.validate}>
+                                            <span>hotelId is required</span>
+                                         </div>}
                                     </p>
                                     <div className='mb-3'>
-                                        <select className='form-control'>
+                                        <select className='form-control' 
+                                        onChange={(e)=>{handleChange(e.target)}}
+                                        multiple
+                                        >
                                             <option >ServiceId</option>
                                             {service.map((item,index)=>{
                                                 return(
-                                                    <option key={index}>{item.name}==&gt;{item.serviceId}</option>
+                                                    <option key={index} value={item.serviceId}
+                                                    >{item.name}</option>
                                                 )
                                             })}
                                         </select>
                                     </div>
-                                    <div className="input-group mb-4">
-                                        <input type="text" 
-                                        className="form-control shadow-sm" 
-                                        placeholder="Enter Serivce in form [1,2,3]" name="Services"
-                                        {...register("Services",{required:"Services is required"})}
-                                        />
-                                    </div>
-                                    <p>{errors.Services?.type==='required'&& 
-                                       <div className={styles.validate}>
-                                        <span>Service Id is required</span>
-                                       </div>}
-                                    </p>
                                     <div class="mb-3">
                                         <input class="form-control" type="file" id="formFile"
                                         name="img"

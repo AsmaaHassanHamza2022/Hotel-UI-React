@@ -18,14 +18,36 @@ function AddHotel(){
      sethotelFeatures(res);
     })
     },[]);
-
+    //=================================================
+    let [selectValue ,setselectValue]=useState([]);
+    let [selectedBox ,setselectBox]=useState(null);
+    let handleChange =(selectBox)=>{
+        setselectBox(selectBox);
+    }
+   //====================================================
+   function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+  
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+  
+      if (opt.selected) {
+        result.push(Number(opt.value));
+      }
+    }
+    return result;
+  }
+  //=========================================================
+  
     let [file,setfile]=useState('');
      let setImageFile=(event)=>{
         setfile(event.target.files[0]);
     }
     const onSuccess=()=> {  
         Swal.fire({   
-          text: 'Feature Added Successfully',  
+          text: 'Hotel Added Successfully',  
           icon: 'success',   
           confirmButtonColor: '#478e9a',  
           confirmButtonText: 'OK'  
@@ -34,6 +56,11 @@ function AddHotel(){
     let navigate=useNavigate();
 // add hotel 
     const onSubmit=async(data)=>{ 
+        let selectedData=getSelectValues(selectedBox);
+        setselectValue([...selectedData]);
+        if(selectValue.length !=0){
+           console.log(selectValue)
+
             const url = `https://localhost:7298/api/Hotels/Add`;    
             const formData = new FormData(); 
              formData.append('name',data.name);    
@@ -42,7 +69,7 @@ function AddHotel(){
              formData.append('description',data.description);    
              formData.append('cheapestPrice', data.cheapestPrice);        
              formData.append('ImagesFile',file);        
-             formData.append('Features',data.Features);    
+             formData.append('Features',JSON.stringify(selectValue));    
              formData.append('rating',data.rating); 
              
             
@@ -52,14 +79,20 @@ function AddHotel(){
             };    
         
             fetch(url,config)
-            .then((data)=>data.json())
-            .then((res)=>{
+            .then((data)=>{
+                data.json();
+            })
+            .then((res)=>{    
                 //onSuccess();
                 //navigate('/admin/hotels');
                 console.log(res);
+                navigate('/admin/hotels');
+                onSuccess();
             })
+        }else{
+            alert("Please Try Again.......!")
+         } 
          
-       
         reset();    
     }
 
@@ -146,27 +179,34 @@ function AddHotel(){
                                         <span>Rating is required</span>
                                        </div>}
                                     </p>
+                                    
                                     <div className="input-group mb-4">
-                                        <select className='form-control'>
-                                            <option>Features</option>
-                                            {hotelFeatures.map(item=>{
-                                                return(
-                                                    <option key={item.featureId}>{item.name}==&gt;{item.featureId}</option>
-                                                )
-                                            })}
+                                        <select 
+                                        className="form-control shadow-sm" 
+                                         name="hotelFeature"
+                                         onChange={(e)=>{handleChange(e.target)}}
+                                         multiple
+                                        // {...register("hotelFeature",{required:"hotel feature is required"})}
+                                        >
+                                           
+                                            {
+                                                hotelFeatures.map((feature,i)=>{
+
+                                                    return(
+                                                        <option key={i} value={feature.featureId}>
+                                                        {feature.name}   
+                                                       </option>
+                                                    )
+                                                  
+                                                  
+                                                })
+                                            }
 
                                         </select>
                                     </div>
-                                    <div className="input-group mb-4">
-                                        <input type="text" 
-                                        className="form-control shadow-sm" 
-                                        placeholder="Enter Features in form [1,2,3]" name="Features"
-                                        {...register("Features",{required:"Features is required"})}
-                                        />
-                                    </div>
-                                    <p>{errors.Features?.type==='required'&& 
+                                    <p>{errors.hotelFeature?.type==='required'&& 
                                       <div className={styles.validate}>
-                                        <span>Features is required</span>
+                                        <span>Hotel Feature is requird</span>
                                       </div>}
                                     </p>
                                     <div class="mb-3">

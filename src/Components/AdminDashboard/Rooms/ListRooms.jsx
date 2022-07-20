@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom'
 import styles from '../AdminHome.module.scss';
 import axios from 'axios';
 import RoomCRUD from './model/RoomAPI';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import img from '../../../Images/5.jpg';
 
 
@@ -30,7 +32,8 @@ function ListRooms(){
                 listData();
             })
             .catch(err=>{console.log(err)})
-        }    
+        }  
+        toast.success("Room deleted Successfully")     
  }
    return(
     <Fragment>
@@ -40,7 +43,7 @@ function ListRooms(){
                </div>
                 <div className={styles.container}>
                     <div className='row'>
-                        {rooms.length===0?<div><h2>No Data</h2></div>:
+                        {rooms.length===0?<div className="spinner-border text-info mt-5" role="status"></div>:
                              <table className={styles.table}>
                              <thead className={styles.head}>
                                  <tr>

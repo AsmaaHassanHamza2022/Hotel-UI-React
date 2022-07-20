@@ -36,13 +36,15 @@ function Login({setStatus,setLogData}){
         
         const respone=USERACCOUNT.login(data)
             .then(res=>{
-                console.log(data)
-                if(data){
+                if(data.UserName=="Admin"){
+                    navigate('/admin');
+                }   
+                else{
                     setStatus(true);
                     setLogData(data.UserName);
                     localStorage.setItem("userLogin",JSON.stringify(data))
-                    navigate('/home');
-                }      
+                    navigate('/home')
+                }   
             })
             .catch(err=>{
                 if(!err?.respone){

@@ -29,7 +29,7 @@ function Header({setStatus,myStatus,logData,upData}){
                             <div className='col-md-4 col-6 d-flex justify-content-end  '>
                                 <Link  to='/register' className='btn text-white mt-3'>{myStatus? logData:upData}</Link>
                                 <Link to='/' className='btn text-white mt-3' onClick={defaultStatus}>
-                                    {myStatus?"Log out":"Log in"}
+                                    "Log out"
                                 </Link>    
                             </div>
                         </div>

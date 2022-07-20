@@ -41,7 +41,7 @@ function Services(){
                </div>
                 <div className={styles.container}>
                     <div className='row w-md-75 w-sm-100'>
-                    {service.length===0?<div><h2>No Data</h2></div>:
+                    {service.length===0?<div className="spinner-border text-info mt-5" role="status"></div>:
                            <table className={styles.table}>
                            <thead className={styles.head}>
                                <tr>

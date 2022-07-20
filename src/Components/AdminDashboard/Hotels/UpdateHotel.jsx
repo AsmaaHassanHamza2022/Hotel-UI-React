@@ -1,8 +1,8 @@
 import React, { Fragment,useState,useEffect } from 'react';
 import styles from '../../Register/Form.module.scss';
-import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import {useParams,} from "react-router-dom";
+import {useParams,Link,useNavigate} from "react-router-dom";
+import Swal from 'sweetalert2'
 
    let UpdateHotel=()=>{
     const {register,handleSubmit,formState:{errors},reset,setValue } = useForm({
@@ -31,10 +31,41 @@ import {useParams,} from "react-router-dom";
      sethotelFeatures(res);
     })
   },[])
-    
+  let [selectValue ,setselectValue]=useState([]);
+  let [selectedBox ,setselectBox]=useState(null);
+  let handleChange =(selectBox)=>{
+      setselectBox(selectBox);
+  }
+  function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+  
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+  
+      if (opt.selected) {
+        result.push(Number(opt.value));
+      }
+    }
+    return result;
+  }  
 // update function
-   
-    const onSubmit=async(data)=>{ 
+const onSuccess=()=> {  
+    Swal.fire({   
+      text: 'Hotel Updated Successfully',  
+      icon: 'success',   
+      confirmButtonColor: '#478e9a',  
+      confirmButtonText: 'OK'  
+    });  
+  } 
+let navigate=useNavigate();
+    const onSubmit=async(data)=>{
+        let selectedData=getSelectValues(selectedBox);
+        setselectValue([...selectedData]);
+        if(selectValue.length !=0){
+           console.log(selectValue)
+ 
 
         const url =`https://localhost:7298/api/Hotels/Update/${id}`;
         console.log(id);
@@ -46,7 +77,7 @@ import {useParams,} from "react-router-dom";
          formData.append('description',data.description);    
          formData.append('cheapestPrice',data.cheapestPrice);    
          formData.append('ImagesFile',file);    
-         formData.append('Features',data.Features);    
+         formData.append('Features',JSON.stringify(selectValue));    
          formData.append('rating',data.rating); 
          
          const config = { 
@@ -58,7 +89,12 @@ import {useParams,} from "react-router-dom";
         .then((data)=>data.json())
         .then((res)=>{
             console.log(res);
+            navigate('/admin/hotels');
+            onSuccess();
         })
+    }else{
+        alert("Please Try Again.......!")
+     } 
 
         reset();
     }
@@ -148,27 +184,34 @@ import {useParams,} from "react-router-dom";
                                         <span>Rating is required</span>
                                        </div>}
                                     </p>
+                                    
                                     <div className="input-group mb-4">
-                                        <select className='form-control'>
-                                            <option>Features</option>
-                                            {hotelFeatures.map(item=>{
-                                                return(
-                                                    <option key={item.featureId}>{item.name}==&gt;{item.featureId}</option>
-                                                )
-                                            })}
+                                        <select 
+                                        className="form-control shadow-sm" 
+                                         name="hotelFeature"
+                                         onChange={(e)=>{handleChange(e.target)}}
+                                         multiple
+                                        // {...register("hotelFeature",{required:"hotel feature is required"})}
+                                        >
+                                           
+                                            {
+                                                hotelFeatures.map((feature,i)=>{
+
+                                                    return(
+                                                        <option key={i} value={feature.featureId}>
+                                                        {feature.name}   
+                                                       </option>
+                                                    )
+                                                  
+                                                  
+                                                })
+                                            }
 
                                         </select>
                                     </div>
-                                    <div className="input-group mb-4">
-                                        <input type="text" 
-                                        className="form-control shadow-sm" 
-                                        placeholder="Enter Features in form [1,2,3]" name="Features"
-                                        {...register("Features",{required:"Features is required"})}
-                                        />
-                                    </div>
-                                    <p>{errors.Features?.type==='required'&& 
+                                    <p>{errors.hotelFeature?.type==='required'&& 
                                       <div className={styles.validate}>
-                                        <span>Features is required</span>
+                                        <span>hotelFeature is requird</span>
                                       </div>}
                                     </p>
                                     <div class="mb-3">

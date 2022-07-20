@@ -13,10 +13,17 @@ import UpdateFeature from './HotelFeatures/UpdateFeature';
 import Services from './RoomServices/Services';
 import AddService from './RoomServices/AddService';
 import UpdateService from './RoomServices/UpdateService';
+import { useState } from 'react';
+
+
 
 
 
 function AdminHome(){  
+    let [flag,setFlag]=useState(true);
+    const handleFlg=()=>{
+        setFlag(false);
+    }
  return(
     <Fragment>
         <div className={styles.container}>
@@ -41,6 +48,9 @@ function AdminHome(){
                                <Link to='/admin/services' className='nav-link active d-md-none d-sm-block' style={{textDecoration:'none'}}>Services</Link>
                             </li>  
                         </ul>
+                        <div className="d-flex" role="search">
+                            <Link className={styles.logOut} to='/'>Log out</Link>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -51,27 +61,29 @@ function AdminHome(){
                            <div className={styles.sideBar}>
                                <div className={styles.hotel}>
                                    <i className="fa-solid fa-archway"></i>
-                                   <Link to='/admin/hotels' className={styles.link}>Hotels</Link>
+                                   <Link to='/admin/hotels' className={styles.link} onClick={handleFlg}>Hotels</Link>
                                </div>
                                <div className={styles.hotel}>
                                    <i class="fa-solid fa-building-circle-check"></i>
-                                   <Link to='/admin/features' className={styles.link}>Features</Link>
+                                   <Link to='/admin/features' className={styles.link} onClick={handleFlg}>Features</Link>
                                </div>
                                <div className={styles.room}>
                                    <i className="fa-solid fa-bed"></i>
-                                   <Link to='/admin/rooms' className={styles.link}>Rooms</Link>
+                                   <Link to='/admin/rooms' className={styles.link} onClick={handleFlg}>Rooms</Link>
                                </div>
                                <div className={styles.room}>
                                    <i class="fa-solid fa-bell-concierge"></i>
-                                   <Link to='/admin/services' className={styles.link}>Services</Link>
+                                   <Link to='/admin/services' className={styles.link} onClick={handleFlg}>Services</Link>
                                </div>
                            </div>
                         </div>
                         
                             <div className='col-lg-9 col-12  p-0'>
-                                <div className={styles.content}>
+                              {flag && <div className={styles.body}><h2>Admin Dashboard</h2></div>}
+                                <div className={styles.myContent}>
+                                    
                                     <Routes>
-                                         <Route path='/hotels/'  element={<ListHotels/>}/>
+                                         <Route path='/hotels'  element={<ListHotels/>}/>
                                          <Route path='/addHotel'  element={<AddHotel/>}/>
                                          <Route path='/editHotel/:id'  element={<UpdateHotel/>}/>
                                          <Route path='/rooms' element={<ListRooms/>}/>
@@ -84,7 +96,9 @@ function AdminHome(){
                                          <Route path='/addService' element={<AddService/>}/>
                                          <Route path='/editService/:id' element={<UpdateService/>}/>
                                      </Routes>
+                                     
                                 </div>
+
                             </div>   
                     </div>
                </div>
