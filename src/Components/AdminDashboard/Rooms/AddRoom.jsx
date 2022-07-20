@@ -129,14 +129,6 @@ function AddRoom(){
                                         <span>Price is required</span>
                                        </div>}
                                     </p>
-                                    <div class="mb-3">
-                                    
-                                    <input class="form-control" type="file" id="formFile"
-                                    onChange={e => setImageFile(e)}
-                                    name="img"
-                                    // {...register("img",{required:"Image is required"})}
-                                    />
-                                    </div>
                                     <p>{errors.img?.type==='required'&& 
                                         <div className={styles.validate}>
                                         <span>Image is required</span>
@@ -147,8 +139,8 @@ function AddRoom(){
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
                                                 return(
-                                                    <option key={item.hotel.hotelId}>
-                                                    {item.hotel.hotelId}==&gt;{item.hotel.name}
+                                                    <option key={item.hotelData.hotelId}>
+                                                    {item.hotelData.name}==&gt;{item.hotelData.hotelId}
                                                     </option>
                                                 )
                                             })}
@@ -171,7 +163,7 @@ function AddRoom(){
                                             <option >ServiceId</option>
                                             {service.map((item,index)=>{
                                                 return(
-                                                    <option key={index}>{item.serviceId}--{item.name}</option>
+                                                    <option key={index}>{item.name}==&gt;{item.serviceId}</option>
                                                 )
                                             })}
                                         </select>
@@ -179,7 +171,7 @@ function AddRoom(){
                                     <div className="input-group mb-4">
                                         <input type="text" 
                                         className="form-control shadow-sm" 
-                                        placeholder="Enter Serivce Id" name="Services"
+                                        placeholder="Enter Serivce in form [1,2,3]" name="Services"
                                         {...register("Services",{required:"Services is required"})}
                                         />
                                     </div>
@@ -188,6 +180,13 @@ function AddRoom(){
                                         <span>Service Id is required</span>
                                        </div>}
                                     </p>
+                                    <div class="mb-3">
+                                        <input class="form-control" type="file" id="formFile"
+                                        onChange={e => setImageFile(e)}
+                                        name="img"
+                                        // {...register("img",{required:"Image is required"})}
+                                        />
+                                    </div>
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Add</button>
                                     </div>

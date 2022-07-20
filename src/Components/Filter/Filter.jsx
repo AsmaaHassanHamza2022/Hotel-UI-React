@@ -46,7 +46,7 @@ const onSubmit=(data)=>{
                    <div className="row">
                          <form onSubmit={handleSubmit(onSubmit)}>
                          <div className="col-md-12  d-md-flex flex-md-row flex-sm-column  p-0  align-items-center justify-content-between my-2">
-                               <div className="col-md-4 col-12 mb-2 px-3">
+                               <div className="col-md-4 col-12  px-3" style={{marginBottom:'11px'}}>
                                 {/* <CountryDropdown id="UNIQUE_ID" className={styles.country} preferredCountries={['gb', 'us']} value="" handleChange={e => console.log(e.target.value)}></CountryDropdown> */}
                                 <div  style={{marginTop:'10px',}}>
                                 <span className="mb-2">City</span>

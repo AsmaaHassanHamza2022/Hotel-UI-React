@@ -27,6 +27,19 @@
     .service{
         text-align:center
     }
+    .btnRes{
+        width:200px !important;
+        height: 40px;
+        background-color: #F56D91;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .btnRes:hover{
+        background-color: #fc8aa9;
+    }
     @media screen and  (min-width:0px){
        img{
         margin-bottom: 30px;

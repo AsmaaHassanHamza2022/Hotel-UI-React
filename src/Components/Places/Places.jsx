@@ -3,19 +3,26 @@ import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import styles  from './Places.module.scss';
-import img from '../../Images/4.jpg';
-
+import img from '../../Images/8.jpg';
+import axios from 'axios';
 
 function Places(){
     // prep variable for carry top rated hotel
     let [topRatedHotels,settopRatedHotels]=useState([])
 
     // catch top rated hotels
+    let topURL='https://localhost:7298/api/Hotels/Top Rating';
     useEffect(()=>{
-        fetch("https://localhost:7298/api/Hotels/Top Rating")
-        .then((data)=>data.json())
-        .then((res)=>settopRatedHotels(res))
-    })
+        axios.get(topURL)
+        .then(res=>{
+            console.log(res.data)
+            settopRatedHotels(res.data);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+        
+    },[])
 
     const setting={    
         // autoplay:true,
@@ -29,8 +36,9 @@ function Places(){
                 items:2
             },
             1000:{
-                items:3
-            }
+                items:4
+            },
+           
             }
         }
     return(
@@ -49,37 +57,44 @@ function Places(){
 
                             return(
                             <div key={i} className={styles.items}>
-                                <div className="card" style={{"width":'18rem'}}>
-                                    <img src={img} className="card-img-top" alt="hotel-name" />
+                                <div className="card shadow-sm" >
+                                <img src={TopRatedhotel.hotelImages[0].name} className="card-img-top" alt="hotel-name" />
                                     <div class="card-body">
-                                        <h5 className="card-title">{TopRatedhotel.hotel.name}</h5>
+                                        <h5 className="card-title">{TopRatedhotel.hotelData.name}</h5>
                                         <div className="starts w-50 my-3 d-flex justify-content-between">
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                        <i class="fa-solid fa-star text-warning"></i>
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                            <i class="fa-solid fa-star text-warning"></i>
                                         </div>
-                                
                                         <p className="card-text">
                                             <i style={{"color":'#327885'}} class="fa-solid fa-city me-3"></i>
-                                            {TopRatedhotel.hotel.city}</p>
+                                            {TopRatedhotel.hotelData.city}</p>
                                         <p className="card-text">
-                                        <i style={{"color":'#327885'}} class="fa-solid fa-globe me-3"></i>
-                                            {TopRatedhotel.hotel.country}
-                                            </p>
-                                        
+                                            <i style={{"color":'#327885'}} class="fa-solid fa-globe me-3"></i>
+                                                {TopRatedhotel.hotelData.country}
+                                        </p>
+                                        <p>
+                                          <i className="fa-solid fa-bell-concierge me-3" style={{"color":'#327885',fontSize:'20px'}}></i>
+                                          <span >{TopRatedhotel.feature.map((item,i)=>{
+                                            return(
+                                                <span key={i}>{item.name}, </span>
+                                            )
+                                          })}</span>
+
+                                        </p>    
                                     </div>
                                    <div className="card-footer">
                                     <div className="d-flex  justify-content-between">
                                         <div className="description">
-                                        <p className="lead">{TopRatedhotel.hotel.description}</p>
+                                        <p className="lead mt-2">{TopRatedhotel.hotelData.description}</p>
                                         </div>
                                         <div className="book-btn d-flex align-items-center">
                                         <div className="data">
-                                        <h4 className="my-3  text-center">{TopRatedhotel.hotel.cheapestPrice
-                                        } $</h4>
-                                        <a href="#" className="btn btn-primary custom-btn">Book now</a>
+                                        <strong className="mb-3  text-center" style={{marginTop:'-10px'}}>{TopRatedhotel.hotelData.cheapestPrice
+                                        } $</strong>
+                                        {/* <a href="#" className="btn btn-primary custom-btn">Book now</a> */}
                                         </div>
                                         
          

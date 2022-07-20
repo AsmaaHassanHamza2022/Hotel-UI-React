@@ -14,15 +14,21 @@ import {useParams,} from "react-router-dom";
   let setImageFile=(event)=>{
         setfile(event.target.files[0]);
     }
-    
+  let [hotelFeatures,sethotelFeatures]=useState([]); 
   useEffect(()=>{
     // fetch data
     fetch(`https://localhost:7298/api/Hotels/${id}`)
     .then(data => data.json())
     .then((res)=>{
         // reset feilds by target hotel
-        const fields = ['name', 'city', 'country', 'description', 'cheapestPrice'];
+        console.log(res)
+        const fields = ['name', 'city', 'country', 'description', 'cheapestPrice','ImagesFile','Features','rating'];
         fields.forEach(field => setValue(field, res[field]));
+    })
+    fetch('https://localhost:7298/api/Features')
+    .then(data => data.json())
+    .then((res)=>{
+     sethotelFeatures(res);
     })
   },[])
     
@@ -31,6 +37,7 @@ import {useParams,} from "react-router-dom";
     const onSubmit=async(data)=>{ 
 
         const url =`https://localhost:7298/api/Hotels/Update/${id}`;
+        console.log(id);
 
         let formData = new FormData(); 
          formData.append('name',data.name);    
@@ -39,9 +46,9 @@ import {useParams,} from "react-router-dom";
          formData.append('description',data.description);    
          formData.append('cheapestPrice',data.cheapestPrice);    
          formData.append('ImagesFile',file);    
-         formData.append('Features',1);    
-         formData.append('rating',"0"); 
-
+         formData.append('Features',data.Features);    
+         formData.append('rating',data.rating); 
+         
          const config = { 
             method: 'PUT', 
             body:formData,    
@@ -129,11 +136,46 @@ import {useParams,} from "react-router-dom";
                                         <span>Min Price is required</span>
                                       </div>}
                                     </p>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Rating" name="rating"
+                                        {...register("rating",{required:"Rating is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.rating?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Rating is required</span>
+                                       </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <select className='form-control'>
+                                            <option>Features</option>
+                                            {hotelFeatures.map(item=>{
+                                                return(
+                                                    <option key={item.featureId}>{item.name}==&gt;{item.featureId}</option>
+                                                )
+                                            })}
+
+                                        </select>
+                                    </div>
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Enter Features in form [1,2,3]" name="Features"
+                                        {...register("Features",{required:"Features is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.Features?.type==='required'&& 
+                                      <div className={styles.validate}>
+                                        <span>Features is required</span>
+                                      </div>}
+                                    </p>
                                     <div class="mb-3">
                                         <input class="form-control" type="file" id="formFile"
                                           onChange={e => setImageFile(e)}
                                         name="img"
-                                        // {...register("img",{required:"Image is required"})}
+                                        //{...register("img",{required:"Image is required"})}
                                         />
                                     </div>
                                     <p>{errors.img?.type==='required'&& 

@@ -40,7 +40,7 @@ function deleteHotel(hotelId){
                </div>
                 <div className={styles.container}>
                     <div className='row'>
-                        {hotelsData.length===0?<div><h2>No Data</h2></div>:
+                        {hotelsData.length===0?<div className="spinner-border text-info mt-5" role="status"></div>:
                            <table className={styles.table}>
                            <thead className={styles.head}>
                                <tr>
@@ -58,24 +58,22 @@ function deleteHotel(hotelId){
                              {hotelsData.map((hotel)=>{
                               return (
                               <tr>
-                                       <td><img src={img}/></td>
-                                       <td >{hotel.hotel.name}</td>
-                                       <td>{hotel.hotel.city}</td>
-                                       <td>{hotel.hotel.country}</td>
-                                       <td>{hotel.hotel.description}</td>
-                                       <td>{hotel.hotel.cheapestPrice }</td>
+                                       <td><img src={hotel.hotelImages[0].name}/></td>
+                                       <td >{hotel.hotelData.name}</td>
+                                       <td>{hotel.hotelData.city}</td>
+                                       <td>{hotel.hotelData.country}</td>
+                                       <td>{hotel.hotelData.description}</td>
+                                       <td>{hotel.hotelData.cheapestPrice }</td>
                                        <td> 
-                                           <Link to={"/admin/editHotel/" + hotel.hotelId }className={styles.edit}>
+                                           <Link to={"/admin/editHotel/" + hotel.hotelData.hotelId }className={styles.edit}>
                                            <i class="fa-solid fa-file-pen"></i>
                                            </Link>  
-                                           <button onClick={(()=>deleteHotel(hotel.hotelId))} className={styles.del}>
+                                           <button onClick={(()=>deleteHotel(hotel.hotelData.hotelId))} className={styles.del}>
                                                <i class="fa-solid fa-trash"></i>
                                            </button>    
                                        </td>   
                                    </tr> )
-   
                                  })}
-          
                              </tbody>
                            </table>
                         }

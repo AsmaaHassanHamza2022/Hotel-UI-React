@@ -64,16 +64,6 @@ function Register({setUpData}){
                                         {...register("FirstName",{required:"First Name is required"})}
                                         />
                                     </div>
-                                    <div className="input-group mb-4">
-                                        <span className="input-group-text " id="basic-addon1">
-                                        <i className="fa-solid fa-user"></i>
-                                        </span>
-                                        <input type="text" 
-                                        className="form-control shadow-sm"
-                                        placeholder="First Name" name="FirstName"
-                                        {...register("FirstName",{required:"First Name is required"})}
-                                        />
-                                    </div>
                                     <p>{errors.FirstName?.type==='required'&&
                                      <div className={styles.validate}>
                                         <span>First Name is required</span>

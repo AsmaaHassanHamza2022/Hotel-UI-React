@@ -23,6 +23,7 @@ function UpdateRoom(){
         .then(data => data.json())
         .then((res)=>{
             // reset feilds by target hotel
+            console.log(res)
             const fields = ['type', 'roomNumber', 'maxPeople', 'description', 'Price','HotelId','Services'];
             fields.forEach(field => setValue(field, res[field]));
         })
@@ -40,6 +41,7 @@ function UpdateRoom(){
     },[])
     const onSubmit=async(data)=>{ 
         const url=`https://localhost:7298/api/Rooms/Update/${param}`;
+        console.log(data)
         const formData = new FormData();
         formData.append('type',data.type);
         formData.append('roomNumber',data.roomNumber);
@@ -133,13 +135,6 @@ function UpdateRoom(){
                                         <span>Price is required</span>
                                        </div>}
                                     </p>
-                                    <div class="mb-3">
-                                        <input class="form-control" type="file" id="formFile"
-                                        name="img"
-                                        onChange={e => setImageFile(e)}
-                                        // {...register("img",{required:"Image is required"})}
-                                        />
-                                    </div>
                                     <p>{errors.img?.type==='required'&& 
                                       <div className={styles.validate}>
                                         <span>Image is required</span>
@@ -150,8 +145,8 @@ function UpdateRoom(){
                                             <option>HotelId</option>
                                             {hotels.map(item=>{
                                                 return(
-                                                    <option key={item.hotel.hotelId}>
-                                                    {item.hotel.hotelId}==&gt;{item.hotel.name}
+                                                    <option key={item.hotelData.hotelId}>
+                                                    {item.hotelData.name}==&gt;{item.hotelData.hotelId}
                                                     </option>
                                                 )
                                             })}
@@ -174,7 +169,7 @@ function UpdateRoom(){
                                             <option >ServiceId</option>
                                             {service.map((item,index)=>{
                                                 return(
-                                                    <option key={index}>{item.serviceId}--{item.name}</option>
+                                                    <option key={index}>{item.name}==&gt;{item.serviceId}</option>
                                                 )
                                             })}
                                         </select>
@@ -182,7 +177,7 @@ function UpdateRoom(){
                                     <div className="input-group mb-4">
                                         <input type="text" 
                                         className="form-control shadow-sm" 
-                                        placeholder="Enter Serivce Id" name="Services"
+                                        placeholder="Enter Serivce in form [1,2,3]" name="Services"
                                         {...register("Services",{required:"Services is required"})}
                                         />
                                     </div>
@@ -191,6 +186,13 @@ function UpdateRoom(){
                                         <span>Service Id is required</span>
                                        </div>}
                                     </p>
+                                    <div class="mb-3">
+                                        <input class="form-control" type="file" id="formFile"
+                                        name="img"
+                                        onChange={e => setImageFile(e)}
+                                        // {...register("img",{required:"Image is required"})}
+                                        />
+                                    </div>
                                     <div className="mb-3 mt-3">
                                         <button  className="btn shadow-lg">Update</button>
                                     </div>

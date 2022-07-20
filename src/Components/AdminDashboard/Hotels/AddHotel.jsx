@@ -9,7 +9,6 @@ function AddHotel(){
         mode: "onTouched"
     });
 
-    //===========load all feature for hotel==========
     let [hotelFeatures,sethotelFeatures]=useState([]);
     useEffect(
     ()=>{
@@ -20,35 +19,8 @@ function AddHotel(){
     })
     },[]);
 
-    // catch selectBox and prepare its value
-
-    let [selectValue ,setselectValue]=useState([]);
-    let [selectedBox ,setselectBox]=useState(null);
-
-   let handleChange =(selectBox)=>{
-    setselectBox(selectBox);
-   }
-
-   // get all values from  select box
-   function getSelectValues(select) {
-    var result = [];
-    var options = select && select.options;
-    var opt;
-  
-    for (var i=0, iLen=options.length; i<iLen; i++) {
-      opt = options[i];
-  
-      if (opt.selected) {
-        result.push(Number(opt.value));
-      }
-    }
-    return result;
-  }
-    //===========================file handling===========================
     let [file,setfile]=useState('');
-
      let setImageFile=(event)=>{
-        // console.log(event)
         setfile(event.target.files[0]);
     }
     const onSuccess=()=> {  
@@ -62,13 +34,6 @@ function AddHotel(){
     let navigate=useNavigate();
 // add hotel 
     const onSubmit=async(data)=>{ 
-        
-        // selected feature for hotel
-        let selectedData=getSelectValues(selectedBox);
-         setselectValue([...selectedData]);
-         if(selectValue.length !=0){
-            console.log(selectValue)
-
             const url = `https://localhost:7298/api/Hotels/Add`;    
             const formData = new FormData(); 
              formData.append('name',data.name);    
@@ -77,8 +42,8 @@ function AddHotel(){
              formData.append('description',data.description);    
              formData.append('cheapestPrice', data.cheapestPrice);        
              formData.append('ImagesFile',file);        
-             formData.append('Features',JSON.stringify(selectValue));    
-             formData.append('rating',"0"); 
+             formData.append('Features',data.Features);    
+             formData.append('rating',data.rating); 
              
             
             const config = { 
@@ -93,9 +58,7 @@ function AddHotel(){
                 //navigate('/admin/hotels');
                 console.log(res);
             })
-         }else{
-            alert("Please Try Again.......!")
-         } 
+         
        
         reset();    
     }
@@ -171,38 +134,42 @@ function AddHotel(){
                                         <span>Min Price is required</span>
                                       </div>}
                                     </p>
-
                                     <div className="input-group mb-4">
-                                        <select 
+                                        <input type="text" 
                                         className="form-control shadow-sm" 
-                                         name="hotelFeature"
-                                         onChange={(e)=>{handleChange(e.target)}}
-                                         multiple
-                                        // {...register("hotelFeature",{required:"hotel feature is required"})}
-                                        >
-                                           
-                                            {
-                                                hotelFeatures.map((feature,i)=>{
-
-                                                    return(
-                                                        <option key={i} value={feature.featureId}>
-                                                        {feature.name}   
-                                                       </option>
-                                                    )
-                                                  
-                                                  
-                                                })
-                                            }
+                                        placeholder="Rating" name="rating"
+                                        {...register("rating",{required:"Rating is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.rating?.type==='required'&& 
+                                       <div className={styles.validate}>
+                                        <span>Rating is required</span>
+                                       </div>}
+                                    </p>
+                                    <div className="input-group mb-4">
+                                        <select className='form-control'>
+                                            <option>Features</option>
+                                            {hotelFeatures.map(item=>{
+                                                return(
+                                                    <option key={item.featureId}>{item.name}==&gt;{item.featureId}</option>
+                                                )
+                                            })}
 
                                         </select>
                                     </div>
-                                    <p>{errors.hotelFeature?.type==='required'&& 
+                                    <div className="input-group mb-4">
+                                        <input type="text" 
+                                        className="form-control shadow-sm" 
+                                        placeholder="Enter Features in form [1,2,3]" name="Features"
+                                        {...register("Features",{required:"Features is required"})}
+                                        />
+                                    </div>
+                                    <p>{errors.Features?.type==='required'&& 
                                       <div className={styles.validate}>
-                                        <span>hotelFeature is requird</span>
+                                        <span>Features is required</span>
                                       </div>}
                                     </p>
                                     <div class="mb-3">
-                                    
                                         <input class="form-control" type="file" id="formFile"
                                         onChange={e => setImageFile(e)}
                                         name="img"

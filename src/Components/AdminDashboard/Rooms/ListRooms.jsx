@@ -21,9 +21,10 @@ function ListRooms(){
     useEffect(()=>{
         listData();
     },[])
-    const deleteRoom=(roomId)=>{
+    function deleteRoom(roomId){
+        console.log(roomId)
         let confirmResult=window.confirm("Are you sure You Want to delete this item");
-        if(confirmResult ==true){
+        if(confirmResult ===true){
             RoomCRUD.delRoom(roomId)
             .then(res=>{
                 listData();
@@ -56,23 +57,19 @@ function ListRooms(){
                                  {rooms.map((item,index)=>{
                                      return(
                                          <tr key={item.roomId}>
-                                             <td><img src={img}/></td>
-                                             <td>{item.room.type}</td>
-                                             <td>{item.room.roomNumber}</td>
-                                             <td>{item.room.maxPeople}</td>
-                                             <td>{item.room.description}</td>
+                                             <td><img src={item.roomImages[0]?.name}/></td>
+                                             <td>{item.roomData.type}</td>
+                                             <td>{item.roomData.roomNumber}</td>
+                                             <td>{item.roomData.maxPeople}</td>
+                                             <td>{item.roomData.description}</td>
                                              <td>
-                                                 {item.room.roomsInHotel?.map(item=>{
-                                                     return(
-                                                         <span key={item.roomId}>{item.price}</span>
-                                                     )
-                                                 })}
+                                                 {item.roomData.roomsInHotel[0]?.price}
                                              </td>
                                              <td> 
-                                                 <Link to={"/admin/editRoom/" + item.roomId }className={styles.edit}>
+                                                 <Link to={"/admin/editRoom/" + item.roomData.roomId }className={styles.edit}>
                                                      <i class="fa-solid fa-file-pen"></i>
                                                  </Link>  
-                                                 <button onClick={(()=>deleteRoom(item.roomId))} className={styles.del}>
+                                                 <button onClick={(()=>deleteRoom(item.roomData.roomId))} className={styles.del}>
                                                      <i class="fa-solid fa-trash"></i>
                                                  </button>    
                                              </td>   
